@@ -1,6 +1,5 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import 'jitsi_meet_conference_options.dart';
 import 'jitsi_meet_event_listener.dart';
 import 'jitsi_meet_method_channel.dart';
 import 'method_response.dart';

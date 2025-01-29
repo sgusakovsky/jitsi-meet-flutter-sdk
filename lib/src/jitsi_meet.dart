@@ -1,8 +1,7 @@
-import 'package:jitsi_meet_govar_flutter_sdk/src/JitsiAudioRecorder.dart';
-import 'package:jitsi_meet_govar_flutter_sdk/src/JitsiChatGPTHandler.dart';
-import 'package:jitsi_meet_govar_flutter_sdk/src/JitsiWhisperHandler.dart';
+import 'package:jitsi_meet_govar_flutter_sdk/src/jitsi_audio_recorder.dart';
+import 'package:jitsi_meet_govar_flutter_sdk/src/jitsi_chat_gpt_handler.dart';
+import 'package:jitsi_meet_govar_flutter_sdk/src/jitsi_whisper_handler.dart';
 
-import 'jitsi_meet_conference_options.dart';
 import 'jitsi_meet_event_listener.dart';
 import 'jitsi_meet_platform_interface.dart';
 import 'method_response.dart';

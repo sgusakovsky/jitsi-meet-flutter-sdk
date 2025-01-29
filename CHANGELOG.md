@@ -1,3 +1,7 @@
+## 10.3.1
+
+* Migrate Jitsi to widget
+
 ## 10.3.0 
 
 * chore(deps): update native sdks to 10.3.0 [1d34c15](https://github.com/jitsi/jitsi-meet-flutter-sdk/commit/1d34c15615dcbd8a161b8850bfe0906584598161).
