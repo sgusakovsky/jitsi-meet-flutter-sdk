@@ -1,4 +1,8 @@
-## 10.3.4
+## 10.3.5
+
+* Migrate Jitsi to widget
+
+* ## 10.3.4
 
 * Migrate Jitsi to widget
 
