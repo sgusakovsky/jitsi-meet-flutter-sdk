@@ -57,15 +57,15 @@ extension JitsiMeetConferenceOptions {
             builder.room = roomName
             builder.serverURL = URL(string: "https://\(domain)")
             
+            var displayName: String? = nil
+            var email: String? = nil
+            var avatar: URL? = nil
+            
             components?.queryItems?.forEach { item in
                 let key = item.name
                 let value = item.value ?? ""
                 
                 if key.starts(with: "userInfo.") {
-                    var displayName: String? = nil
-                    var email: String? = nil
-                    var avatar: URL? = nil
-                    
                     switch key {
                     case "userInfo.displayName":
                         displayName = value
@@ -76,12 +76,6 @@ extension JitsiMeetConferenceOptions {
                     default:
                         break
                     }
-                    let userInfo = JitsiMeetUserInfo(
-                        displayName: displayName,
-                        andEmail: email,
-                        andAvatar: avatar
-                    )
-                    builder.userInfo = userInfo
                 } else if key.starts(with: "config.") {
                     switch key {
                     case "config.startWithAudioMuted":
@@ -110,6 +104,13 @@ extension JitsiMeetConferenceOptions {
                     builder.setFeatureFlag(key, withValue: value == "true")
                 }
             }
+            
+            let userInfo = JitsiMeetUserInfo(
+                displayName: displayName,
+                andEmail: email,
+                andAvatar: avatar
+            )
+            builder.userInfo = userInfo
         }
         
         return options
