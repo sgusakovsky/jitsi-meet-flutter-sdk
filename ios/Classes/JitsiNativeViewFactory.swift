@@ -62,16 +62,26 @@ extension JitsiMeetConferenceOptions {
                 let value = item.value ?? ""
                 
                 if key.starts(with: "userInfo.") {
+                    var displayName: String? = nil
+                    var email: String? = nil
+                    var avatar: URL? = nil
+                    
                     switch key {
                     case "userInfo.displayName":
-                        builder.userInfo?.displayName = value
+                        displayName = value
                     case "userInfo.email":
-                        builder.userInfo?.email = value
+                        email = value
                     case "userInfo.avatar":
-                        builder.userInfo?.avatar = URL(string: value)
+                        avatar = URL(string: value)
                     default:
                         break
                     }
+                    let userInfo = JitsiMeetUserInfo(
+                        displayName: displayName,
+                        andEmail: email,
+                        andAvatar: avatar
+                    )
+                    builder.userInfo = userInfo
                 } else if key.starts(with: "config.") {
                     switch key {
                     case "config.startWithAudioMuted":
