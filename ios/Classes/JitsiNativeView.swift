@@ -5,10 +5,11 @@ import JitsiMeetSDK
 class JitsiNativeView: UIView, FlutterPlatformView {
     func view() -> UIView { self }
     
-    
     var jitsiMeetView: JitsiMeetView?
-    let options: JitsiMeetConferenceOptions
-    let eventSink: FlutterEventSink?
+    fileprivate var pipViewCoordinator: PiPViewCoordinator?
+    fileprivate var wrapperJitsiMeetView: UIView?
+    fileprivate let options: JitsiMeetConferenceOptions
+    fileprivate let eventSink: FlutterEventSink?
     
     init(options: JitsiMeetConferenceOptions, eventSink: FlutterEventSink?) {
         self.options = options
@@ -21,6 +22,12 @@ class JitsiNativeView: UIView, FlutterPlatformView {
         fatalError("init(coder:) is not supported")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let rect = CGRect(origin: .zero, size: bounds.size)
+        pipViewCoordinator?.resetBounds(bounds: rect)
+    }
+    
     private func setupView() {
         openJitsiMeet()
     }
@@ -30,16 +37,29 @@ class JitsiNativeView: UIView, FlutterPlatformView {
         
         jitsiMeetView = JitsiMeetView()
         jitsiMeetView?.frame = bounds
-        addSubview(jitsiMeetView!)
+        let wrapperJitsiMeetView = WrapperView()
+        wrapperJitsiMeetView.backgroundColor = .black
+        wrapperJitsiMeetView.frame = bounds
+        self.wrapperJitsiMeetView = wrapperJitsiMeetView
+        
+        addSubview(wrapperJitsiMeetView)
+        self.wrapperJitsiMeetView?.addSubview(jitsiMeetView!)
         
         jitsiMeetView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         jitsiMeetView?.delegate = self
         jitsiMeetView?.join(options)
+        
+        pipViewCoordinator = PiPViewCoordinator(withView: wrapperJitsiMeetView)
+        pipViewCoordinator?.configureAsStickyView(withParentView: self)
+        pipViewCoordinator?.show()
     }
     
     private func cleanUp() {
         jitsiMeetView?.removeFromSuperview()
+        wrapperJitsiMeetView?.removeFromSuperview()
         jitsiMeetView = nil
+        wrapperJitsiMeetView = nil
+        pipViewCoordinator = nil
     }
 }
 
@@ -98,8 +118,28 @@ extension JitsiNativeView: JitsiMeetViewDelegate {
     
     func ready(toClose data: [AnyHashable : Any]) {
         eventSink?(["event": "readyToClose"])
-        DispatchQueue.main.async {
-            self.cleanUp()
+        DispatchQueue.main.async { [weak self] in
+            self?.cleanUp()
         }
+    }
+    
+    func enterPicture(inPicture data: [AnyHashable : Any]!) {
+        DispatchQueue.main.async { [weak self] in
+            self?.pipViewCoordinator?.enterPictureInPicture()
+        }
+    }
+}
+
+class WrapperView: UIView {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
     }
 }
