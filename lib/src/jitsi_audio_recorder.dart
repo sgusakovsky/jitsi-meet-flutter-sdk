@@ -9,15 +9,7 @@ class JitsiAudioRecorder {
 
   Future<String> _getRecordingPath() async {
     final directory = await getTemporaryDirectory();
-    final filePath = path.join(directory.path, 'recordings');
-    final fileName = 'recording_${DateTime.now().millisecondsSinceEpoch}.wav';
-
-    final dir = Directory(filePath);
-    if (!await dir.exists()) {
-      await dir.create(recursive: true);
-    }
-
-    return path.join(filePath, fileName);
+    return "${directory.path}/recording_${DateTime.now().millisecondsSinceEpoch}.m4a";
   }
 
   Future<MethodResponse> startRecording() async {
@@ -27,10 +19,7 @@ class JitsiAudioRecorder {
 
     final filePath = await _getRecordingPath();
 
-    const config = RecordConfig(
-      encoder: AudioEncoder.pcm16bits,
-      sampleRate: 16000
-    );
+    const config = RecordConfig();
 
     await _recorder.start(config, path: filePath);
     return MethodResponse(isSuccess: true, message: "Recording has started at path: $filePath");
