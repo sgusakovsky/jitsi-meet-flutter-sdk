@@ -167,6 +167,21 @@ class MethodChannelJitsiMeet extends JitsiMeetPlatform {
     });
   }
 
+  @override
+  Future<MethodResponse> leave() async {
+    return await methodChannel
+        .invokeMethod<String>('leave')
+        .then((message) {
+      return MethodResponse(isSuccess: true, message: message);
+    }).catchError((error) {
+      return MethodResponse(
+        isSuccess: false,
+        message: error.toString(),
+        error: error,
+      );
+    });
+  }
+
   /// Sends and event that will trigger the [JitsiMeetEventListener.participantsInfoRetrieved] event
   /// which will contain participants information.
   @override

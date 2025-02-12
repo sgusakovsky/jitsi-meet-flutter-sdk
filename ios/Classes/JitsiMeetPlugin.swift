@@ -37,6 +37,8 @@ public class JitsiMeetPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         case "getPlatformVersion":
             result("iOS " + UIDevice.current.systemVersion)
             return
+        case "leave":
+            leave(call, result: result)
         case "hangUp":
             hangUp(call, result: result)
             return
@@ -67,6 +69,11 @@ public class JitsiMeetPlugin: NSObject, FlutterPlugin, FlutterStreamHandler {
         default:
           result(FlutterMethodNotImplemented)
         }
+    }
+    
+    private func leave(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        jitsiNativeView?.jitsiMeetView?.leave()
+        result("Successfully left conference")
     }
 
     private func hangUp(_ call: FlutterMethodCall, result: @escaping FlutterResult) {

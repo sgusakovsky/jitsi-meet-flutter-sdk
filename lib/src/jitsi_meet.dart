@@ -86,6 +86,10 @@ class JitsiMeet {
     return await JitsiMeetPlatform.instance.enterPiP();
   }
 
+  Future<MethodResponse> leave() async {
+    return await JitsiMeetPlatform.instance.leave();
+  }
+
   Future<MethodResponse> startRecording() async {
     return await _recorder.startRecording();
   }

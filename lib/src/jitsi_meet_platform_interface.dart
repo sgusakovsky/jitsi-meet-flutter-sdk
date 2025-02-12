@@ -88,6 +88,10 @@ abstract class JitsiMeetPlatform extends PlatformInterface {
     throw UnimplementedError('openChat() has not been implemented.');
   }
 
+  Future<MethodResponse> leave() async {
+    throw UnimplementedError('leave() has not been implemented.');
+  }
+
   /// Sends and event that will trigger the [JitsiMeetEventListener.participantsInfoRetrieved] event
   /// which will contain participants information.
   Future<MethodResponse> retrieveParticipantsInfo() async {

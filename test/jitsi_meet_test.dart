@@ -20,6 +20,11 @@ class MockJitsiMeetPlatform
   }
 
   @override
+  Future<MethodResponse> leave() {
+    // TODO: implement leave
+    throw UnimplementedError();
+  }
+  @override
   Future<MethodResponse> hangUp() {
     // TODO: implement hangUp
     throw UnimplementedError();
