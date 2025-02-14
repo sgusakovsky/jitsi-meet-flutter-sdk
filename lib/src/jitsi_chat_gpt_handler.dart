@@ -23,6 +23,7 @@ class JitsiChatGPTHandler {
     final body = {
       'model': model,
       'messages': [
+        {"role": "system", "content": "You respond only in plain text, without using Markdown."},
         {'role': 'user', 'content': prompt}
       ],
       'max_tokens': maxTokens,
