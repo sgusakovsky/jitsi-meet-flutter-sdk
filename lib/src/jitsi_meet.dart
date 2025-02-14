@@ -104,8 +104,19 @@ class JitsiMeet {
     return result;
   }
 
-  Future<String?>makeChatGPTRequest(String bearer, String prompt, {String model = 'gpt-4', int maxTokens = 10000}) async {
-    final chatGPTHandler = JitsiChatGPTHandler(bearer: bearer, model: model, maxTokens: maxTokens);
+  Future<String?>makeChatGPTRequest(
+      String bearer,
+      String prompt,
+      {String model = 'gpt-4',
+        int maxTokens = 10000,
+        ResponseFormat responseFormat = ResponseFormat.json}
+      ) async {
+    final chatGPTHandler = JitsiChatGPTHandler(
+        bearer: bearer,
+        model: model,
+        maxTokens: maxTokens,
+        responseFormat: responseFormat
+    );
     final result = await chatGPTHandler.makeChatGPTRequest(prompt);
     return result;
   }
