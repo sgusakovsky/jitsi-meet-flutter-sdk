@@ -2,30 +2,15 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-enum ResponseFormat { markdown, json }
-
-extension ResponseFormatExtension on ResponseFormat {
-  String get value {
-    switch (this) {
-      case ResponseFormat.json:
-        return 'json';
-      case ResponseFormat.markdown:
-      return 'text';
-    }
-  }
-}
-
 class JitsiChatGPTHandler {
   final String bearer;
   final String model;
   final int maxTokens;
-  final ResponseFormat responseFormat;
 
   JitsiChatGPTHandler({
     required this.bearer,
-    this.model = 'gpt-4',
-    this.maxTokens = 10000,
-    this.responseFormat = ResponseFormat.json,
+    this.model = 'gpt-4-turbo',
+    this.maxTokens = 4096
   });
 
   Future<String?>makeChatGPTRequest(String prompt) async {
@@ -41,8 +26,6 @@ class JitsiChatGPTHandler {
         {'role': 'user', 'content': prompt}
       ],
       'max_tokens': maxTokens,
-      if (responseFormat != ResponseFormat.markdown)
-        'response_format': responseFormat.value,
     };
 
     final response = await http.post(
