@@ -45,16 +45,15 @@ extension JitsiMeetConferenceOptions {
             throw NSError(domain: "Invalid URL", code: -1, userInfo: nil)
         }
         
-        // Получаем базовый URL сервера и комнату
-        let serverURL = URL(string: "\(url.scheme ?? "https")://\(url.host ?? "")")
-        let room = url.path.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+        let domain = url.host ?? ""
+        let room = url.pathComponents.last ?? ""
         
         if room.isEmpty {
             throw NSError(domain: "Invalid room name", code: -1, userInfo: nil)
         }
 
         let builder = JitsiMeetConferenceOptions.fromBuilder { (builder) in
-            builder.serverURL = serverURL
+            builder.serverURL = URL(string: "https://\(domain)")
             builder.room = room
             
             var displayName: String? = nil
