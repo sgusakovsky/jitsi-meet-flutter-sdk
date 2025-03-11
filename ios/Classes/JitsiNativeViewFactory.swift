@@ -45,8 +45,9 @@ extension JitsiMeetConferenceOptions {
             throw NSError(domain: "Invalid URL", code: -1, userInfo: nil)
         }
         
-        let domain = url.host ?? ""
-        let room = url.pathComponents.last ?? ""
+        let host = url.host ?? ""
+        let domain = url.port != nil ? "\(host):\(url.port!)" : host
+        let room = url.pathComponents.last(where: { !$0.isEmpty }) ?? ""
         
         if room.isEmpty {
             throw NSError(domain: "Invalid room name", code: -1, userInfo: nil)
@@ -62,7 +63,7 @@ extension JitsiMeetConferenceOptions {
             
             // Разбираем параметры конфигурации
             if let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-               let fragment = components.fragment {
+               let fragment = components.fragment?.decodeJSONString() {
                 let params = fragment.split(separator: "&")
                 for param in params {
                     let keyValue = param.split(separator: "=")
@@ -102,7 +103,11 @@ extension JitsiMeetConferenceOptions {
                                 builder.setAudioOnly(value == "true")
                             // 🔹 Toolbar Buttons
                             case "config.toolbarButtons":
-                                let buttons = value.split(separator: ",").map { String($0) }
+                                let buttons = value
+                                    .replacingOccurrences(of: "[", with: "")
+                                    .replacingOccurrences(of: "]", with: "")
+                                    .split(separator: ",")
+                                    .map { String($0) }
                                 builder.setConfigOverride("toolbarButtons", withValue: buttons)
                             // 🔹 setFeatureFlag
                             case "config.prejoinPageEnabled":
@@ -167,6 +172,16 @@ extension JitsiMeetConferenceOptions {
         }
         
         return builder
+    }
+
+}
+
+extension String {
+    
+    func decodeJSONString() -> String {
+        let percentDecoded = self.removingPercentEncoding ?? self
+        let result = percentDecoded.replacingOccurrences(of: "\"", with: "")
+        return result
     }
 
 }
