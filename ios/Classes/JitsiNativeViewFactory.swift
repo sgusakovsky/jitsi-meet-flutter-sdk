@@ -61,7 +61,6 @@ extension JitsiMeetConferenceOptions {
             var email: String? = nil
             var avatar: URL? = nil
             
-            // Разбираем параметры конфигурации
             if let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
                let fragment = components.fragment?.decodeJSONString() {
                 let params = fragment.split(separator: "&")
@@ -103,12 +102,68 @@ extension JitsiMeetConferenceOptions {
                                 builder.setAudioOnly(value == "true")
                             // 🔹 Toolbar Buttons
                             case "config.toolbarButtons":
-                                let buttons = value
+                                let webButtons = value
                                     .replacingOccurrences(of: "[", with: "")
                                     .replacingOccurrences(of: "]", with: "")
                                     .split(separator: ",")
-                                    .map { String($0) }
-                                builder.setConfigOverride("toolbarButtons", withValue: buttons)
+                                    .map { String($0).trimmingCharacters(in: .whitespaces) }
+                                
+                                let featureFlags: [String: String] = [
+                                    "microphone": "audio-mute.enabled",
+                                    "camera": "video-mute.enabled",
+                                    "desktop": "android.screensharing.enabled", // На iOS: ios.screensharing.enabled
+                                    "chat": "chat.enabled",
+                                    "raisehand": "raise-hand.enabled",
+                                    "participants-pane": "participants.enabled",
+                                    "tileview": "tile-view.enabled",
+                                    "toggle-camera": "toggle-camera-button.enabled",
+                                    "hangup": "toolbox.enabled", // Завершение вызова - часть тулбара
+                                    "profile": "settings.enabled",
+                                    "invite": "invite.enabled",
+                                    "videoquality": "resolution", // Управление качеством видео
+                                    "fullscreen": "fullscreen.enabled",
+                                    "security": "security-options.enabled",
+                                    "closedcaptions": "close-captions.enabled",
+                                    "recording": "recording.enabled",
+                                    "highlight": "reactions.enabled", // Подсветка, скорее всего, часть реакций
+                                    "livestreaming": "live-streaming.enabled",
+                                    "sharedvideo": "video-share.enabled",
+                                    "shareaudio": "audio-only.enabled",
+                                    "noisesuppression": "audio-device-button.enabled",
+                                    "whiteboard": "etherpad.enabled",
+                                    "etherpad": "etherpad.enabled",
+                                    "select-background": "prejoinpage.hideDisplayName", // Аналог для управления фоном
+                                    "undock-iframe": "pip.enabled", // Окно "картинка в картинке"
+                                    "dock-iframe": "pip.enabled",
+                                    "settings": "settings.enabled",
+                                    "stats": "speakerstats.enabled",
+                                    "shortcuts": "shortcuts.enabled",
+                                    "embedmeeting": "embedmeeting.enabled",
+                                    "feedback": "feedback.enabled",
+                                    "download": "download.enabled",
+                                    "help": "help.enabled",
+                                    "filmstrip": "filmstrip.enabled"
+                                ]
+                                
+                                featureFlags.forEach { button, flag in
+                                    builder.setFeatureFlag(flag, withValue: webButtons.contains(button))
+                                }
+                                
+                                let supportedButtons = [
+                                    "microphone",
+                                    "camera",
+                                    "chat",
+                                    "raisehand",
+                                    "tile-view",
+                                    "security",
+                                    "closedcaptions"
+                                ]
+                                
+                                let iosButtons = webButtons
+                                    .filter { supportedButtons.contains($0) }
+                                    .map { $0 == "toggle-camera" ? "camera" : $0 }
+                                
+                                builder.setConfigOverride("toolbarButtons", withValue: iosButtons)
                             // 🔹 setFeatureFlag
                             case "config.prejoinPageEnabled":
                                 builder.setFeatureFlag("prejoinPageEnabled", withValue: (value == "true"))
