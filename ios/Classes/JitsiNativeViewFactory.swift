@@ -111,29 +111,26 @@ extension JitsiMeetConferenceOptions {
                                 let featureFlags: [String: String] = [
                                     "microphone": "audio-mute.enabled",
                                     "camera": "video-mute.enabled",
-                                    "desktop": "android.screensharing.enabled", // На iOS: ios.screensharing.enabled
+                                    "desktop": "ios.screensharing.enabled",
                                     "chat": "chat.enabled",
                                     "raisehand": "raise-hand.enabled",
                                     "participants-pane": "participants.enabled",
                                     "tileview": "tile-view.enabled",
                                     "toggle-camera": "toggle-camera-button.enabled",
-                                    "hangup": "toolbox.enabled", // Завершение вызова - часть тулбара
-                                    "profile": "settings.enabled",
                                     "invite": "invite.enabled",
-                                    "videoquality": "resolution", // Управление качеством видео
+                                    "videoquality": "resolution",
                                     "fullscreen": "fullscreen.enabled",
                                     "security": "security-options.enabled",
                                     "closedcaptions": "close-captions.enabled",
-                                    "recording": "recording.enabled",
-                                    "highlight": "reactions.enabled", // Подсветка, скорее всего, часть реакций
+                                    "recording": "ios.recording.enabled",
+                                    "highlight": "reactions.enabled",
                                     "livestreaming": "live-streaming.enabled",
                                     "sharedvideo": "video-share.enabled",
                                     "shareaudio": "audio-only.enabled",
                                     "noisesuppression": "audio-device-button.enabled",
                                     "whiteboard": "etherpad.enabled",
                                     "etherpad": "etherpad.enabled",
-                                    "select-background": "prejoinpage.hideDisplayName", // Аналог для управления фоном
-                                    "undock-iframe": "pip.enabled", // Окно "картинка в картинке"
+                                    "undock-iframe": "pip.enabled",
                                     "dock-iframe": "pip.enabled",
                                     "settings": "settings.enabled",
                                     "stats": "speakerstats.enabled",
@@ -142,7 +139,9 @@ extension JitsiMeetConferenceOptions {
                                     "feedback": "feedback.enabled",
                                     "download": "download.enabled",
                                     "help": "help.enabled",
-                                    "filmstrip": "filmstrip.enabled"
+                                    "filmstrip": "filmstrip.enabled",
+                                    "carmode": "car-mode.enabled",
+                                    "breakout-rooms": "breakout-rooms.enabled"
                                 ]
                                 
                                 featureFlags.forEach { button, flag in
@@ -153,6 +152,8 @@ extension JitsiMeetConferenceOptions {
                                     "microphone",
                                     "camera",
                                     "chat",
+                                    "hangup",
+                                    "profile",
                                     "raisehand",
                                     "tile-view",
                                     "security",
