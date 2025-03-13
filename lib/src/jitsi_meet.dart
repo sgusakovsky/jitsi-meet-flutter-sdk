@@ -98,8 +98,8 @@ class JitsiMeet {
     return await _recorder.stopRecording();
   }
 
-  Future<String?> transcribeWithWhisper(String bearer, String recordingFilePath, {String model = 'whisper-1'}) async {
-    final whisperHandler = JitsiWhisperHandler(bearer: bearer, model: model);
+  Future<String?> transcribeWithWhisper(String bearer, String recordingFilePath, String? language, {String model = 'whisper-1'}) async {
+    final whisperHandler = JitsiWhisperHandler(bearer: bearer, language: language, model: model);
     final result = await whisperHandler.transcribeWithWhisper(recordingFilePath);
     return result;
   }

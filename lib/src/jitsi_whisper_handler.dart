@@ -5,9 +5,11 @@ import 'package:http/http.dart' as http;
 class JitsiWhisperHandler {
   final String bearer;
   final String model;
+  final String? language;
 
   JitsiWhisperHandler({
     required this.bearer,
+    this.language,
     this.model = 'whisper-1'
   });
 
@@ -21,6 +23,10 @@ class JitsiWhisperHandler {
     request.files.add(await http.MultipartFile.fromPath('file', file.path));
     request.headers['Authorization'] = 'Bearer $bearer';
     request.fields['model'] = model;
+
+    if (language != null) {
+      request.fields['language'] = language!;
+    }
 
     final response = await request.send();
     if (response.statusCode == 200) {

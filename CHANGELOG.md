@@ -1,3 +1,7 @@
+## 10.3.20
+
+* Migrate Jitsi to widget 10.3.20 (pip)
+
 ## 10.3.19
 
 * Migrate Jitsi to widget 10.3.19 (pip)
