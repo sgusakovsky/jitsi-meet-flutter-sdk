@@ -22,7 +22,6 @@ class JitsiAudioRecorder {
   }
 
   Future<String> _getRecordingPath() async {
-    final directory = await getTemporaryDirectory();
     return "${_audioDirectory?.path}/recording_${DateTime.now().millisecondsSinceEpoch}.wav";
   }
 
