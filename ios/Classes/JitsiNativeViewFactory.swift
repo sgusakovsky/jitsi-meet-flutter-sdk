@@ -2,6 +2,102 @@ import UIKit
 import Flutter
 import JitsiMeetSDK
 
+enum FeatureFlags: CaseIterable {
+    case welcomePageEnabled
+    case audioFocusDisabled
+    case addPeopleEnabled
+    case audioMuteButtonEnabled
+    case audioOnlyButtonEnabled
+    case calendarEnabled
+    case callIntegrationEnabled
+    case carModeEnabled
+    case closeCaptionsEnabled
+    case conferenceTimerEnabled
+    case chatEnabled
+    case filmstripEnabled
+    case fullScreenEnabled
+    case helpButtonEnabled
+    case inviteEnabled
+    case androidScreenSharingEnabled
+    case speakerStatsEnabled
+    case kickOutEnabled
+    case liveStreamingEnabled
+    case lobbyModeEnabled
+    case meetingNameEnabled
+    case meetingPasswordEnabled
+    case notificationEnabled
+    case overflowMenuEnabled
+    case pipEnabled
+    case pipWhileScreenSharingEnabled
+    case preJoinPageEnabled
+    case preJoinPageHideDisplayName
+    case raiseHandEnabled
+    case reactionsEnabled
+    case recordingEnabled
+    case replaceParticipant
+    case securityOptionEnabled
+    case serverUrlChangeEnabled
+    case settingsEnabled
+    case tileViewEnabled
+    case videoMuteEnabled
+    case videoShareEnabled
+    case toolboxEnabled
+    case resolution
+    case unsafeRoomWarningEnabled
+    case iosRecordingEnabled
+    case iosScreenSharingEnabled
+    case toolboxAlwaysVisible
+    
+    var value: String {
+        switch self {
+        case .welcomePageEnabled: return "welcomepage.enabled"
+        case .audioFocusDisabled: return "audio-focus.disabled"
+        case .addPeopleEnabled: return "add-people.enabled"
+        case .audioMuteButtonEnabled: return "audio-mute.enabled"
+        case .audioOnlyButtonEnabled: return "audio-only.enabled"
+        case .calendarEnabled: return "calendar.enabled"
+        case .callIntegrationEnabled: return "call-integration.enabled"
+        case .carModeEnabled: return "car-mode.enabled"
+        case .closeCaptionsEnabled: return "close-captions.enabled"
+        case .conferenceTimerEnabled: return "conference-timer.enabled"
+        case .chatEnabled: return "chat.enabled"
+        case .filmstripEnabled: return "filmstrip.enabled"
+        case .fullScreenEnabled: return "fullscreen.enabled"
+        case .helpButtonEnabled: return "help.enabled"
+        case .inviteEnabled: return "invite.enabled"
+        case .androidScreenSharingEnabled: return "android.screensharing.enabled"
+        case .speakerStatsEnabled: return "speakerstats.enabled"
+        case .kickOutEnabled: return "kick-out.enabled"
+        case .liveStreamingEnabled: return "live-streaming.enabled"
+        case .lobbyModeEnabled: return "lobby-mode.enabled"
+        case .meetingNameEnabled: return "meeting-name.enabled"
+        case .meetingPasswordEnabled: return "meeting-password.enabled"
+        case .notificationEnabled: return "notifications.enabled"
+        case .overflowMenuEnabled: return "overflow-menu.enabled"
+        case .pipEnabled: return "pip.enabled"
+        case .pipWhileScreenSharingEnabled: return "pip-while-screen-sharing.enabled"
+        case .preJoinPageEnabled: return "prejoinpage.enabled"
+        case .preJoinPageHideDisplayName: return "prejoinpage.hideDisplayName"
+        case .raiseHandEnabled: return "raise-hand.enabled"
+        case .reactionsEnabled: return "reactions.enabled"
+        case .recordingEnabled: return "recording.enabled"
+        case .replaceParticipant: return "replace.participant"
+        case .securityOptionEnabled: return "security-options.enabled"
+        case .serverUrlChangeEnabled: return "server-url-change.enabled"
+        case .settingsEnabled: return "settings.enabled"
+        case .tileViewEnabled: return "tile-view.enabled"
+        case .videoMuteEnabled: return "video-mute.enabled"
+        case .videoShareEnabled: return "video-share.enabled"
+        case .toolboxEnabled: return "toolbox.enabled"
+        case .resolution: return "resolution"
+        case .unsafeRoomWarningEnabled: return "unsaferoomwarning.enabled"
+        case .iosRecordingEnabled: return "ios.recording.enabled"
+        case .iosScreenSharingEnabled: return "ios.screensharing.enabled"
+        case .toolboxAlwaysVisible: return "toolbox.alwaysVisible"
+        }
+    }
+}
+
 class JitsiNativeViewFactory: NSObject, FlutterPlatformViewFactory {
     private var messenger: FlutterBinaryMessenger
     private var eventSinkProvider: () -> FlutterEventSink?
@@ -215,7 +311,16 @@ extension JitsiMeetConferenceOptions {
                             break
                         }
                     } else {
-                        builder.setFeatureFlag(key, withValue: value == "true")
+                        if let featureFlag = FeatureFlags.allCases.first(where: { "\($0)" == key }) {
+                            if value == "true" || value == "false" {
+                                    builder.setFeatureFlag(featureFlag.value, withValue: ObjCBool(value == "true"))
+                                    print(ObjCBool(value == "true"))
+                                } else {
+                                    builder.setFeatureFlag(featureFlag.value, withValue: value)
+                                }
+                        } else {
+                            builder.setFeatureFlag(key, withValue: value == "true")
+                        }
                     }
                 }
             }

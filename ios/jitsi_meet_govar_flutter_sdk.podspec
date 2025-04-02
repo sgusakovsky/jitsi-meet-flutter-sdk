@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'jitsi_meet_govar_flutter_sdk'
-  s.version          = '10.3.22'
+  s.version          = '10.3.23'
   s.summary          = 'A custom fork of jitsi_meet_flutter_sdk with some modifications.'
   s.description      = <<-DESC
 Jitsi Meet Flutter SDK
