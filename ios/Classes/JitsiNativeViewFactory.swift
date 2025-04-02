@@ -313,8 +313,8 @@ extension JitsiMeetConferenceOptions {
                     } else {
                         if let featureFlag = FeatureFlags.allCases.first(where: { "\($0)" == key }) {
                             if value == "true" || value == "false" {
-                                    builder.setFeatureFlag(featureFlag.value, withValue: ObjCBool(value == "true"))
-                                    print(ObjCBool(value == "true"))
+                                    builder.setFeatureFlag(featureFlag.value, withValue: value == "true")
+                                    print(value == "true")
                                 } else {
                                     builder.setFeatureFlag(featureFlag.value, withValue: value)
                                 }
